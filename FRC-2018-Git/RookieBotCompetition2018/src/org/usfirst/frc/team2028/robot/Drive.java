@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team2028.robot.Parameters.CanId;
 import org.usfirst.frc.team2028.robot.Parameters;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.Command;
 
 public class Drive extends Subsystem implements PIDOutput {
 //	private Gyro gyro;
@@ -22,11 +23,21 @@ public class Drive extends Subsystem implements PIDOutput {
 	private DoubleSolenoid shifter;
 	
 	private DoubleSolenoid ptoshift;
+	
+	double leftspeed;
+	double rightspeed;
+	boolean isvoltagemode;
+	boolean ispositionmode;
+	boolean isauto;
+	double position;
+	double value_;
+	
 	/** 
 	 * Default constructor.
 	 */
-	Drive()
+	Drive(Command joystickDrive)
 	{
+//		air = new AnalogInput(3);
 		shifter = new DoubleSolenoid(Parameters.LOW_GEAR, Parameters.HIGH_GEAR);
 		ptoshift = new DoubleSolenoid(2, 3); //FIX ME! PUT IN PARAMETERS!!!!!!
 		left = new DriveSide(CanId.LEFT_MASTER.getCanId(), 
@@ -36,14 +47,9 @@ public class Drive extends Subsystem implements PIDOutput {
 				CanId.RIGHT_FOLLOWER.getCanId(), 
 				!Parameters.LEFT_DRIVE_INVERTED, Parameters.RIGHT_PHASE);
         shifter.set(DoubleSolenoid.Value.kForward);
+        this.setDefaultCommand(joystickDrive);
 	}
-	double leftspeed;
-	double rightspeed;
-	boolean isvoltagemode;
-	boolean ispositionmode;
-	boolean isauto;
-	double position;
-	double value_;
+
 	/**
 	 * Method invoked by a PIDController class as part of its main
 	 * calculation loop.  Only used when the robot is spinning in 
@@ -129,6 +135,11 @@ public class Drive extends Subsystem implements PIDOutput {
 		isvoltagemode = false;
 	}
 	
+//	public double getAirPressure()
+//	{
+//		return air.getAverageVoltage();
+//	}
+	
 	public double getVoltage(boolean isLeft, boolean master) {
 		if (isLeft) {
 			return left.getVoltage(master);
@@ -186,7 +197,7 @@ public class Drive extends Subsystem implements PIDOutput {
 		
 		isvoltagemode = false;
 		rightspeed = 200;
-		leftspeed = 200;
+		leftspeed = 210;
 		if(right.getPosition() > pos)
 		{
 			rightspeed = 0;
@@ -206,18 +217,42 @@ public class Drive extends Subsystem implements PIDOutput {
 	{
 		if(getHighGear() == DoubleSolenoid.Value.kForward)
 		{
-			ptoshift.set(DoubleSolenoid.Value.kReverse);
+//			ptoshift.set(DoubleSolenoid.Value.kReverse);
 			shifter.set(DoubleSolenoid.Value.kReverse);
 		}
 		else
 		{
-			ptoshift.set(DoubleSolenoid.Value.kForward);
+//			ptoshift.set(DoubleSolenoid.Value.kForward);
 			shifter.set(DoubleSolenoid.Value.kForward);
 		}
+	}
+	public void shiftPTO()
+	{
+		if(getPTOHigh() == DoubleSolenoid.Value.kForward)
+		{
+			ptoshift.set(DoubleSolenoid.Value.kReverse);
+		}
+		else
+		{
+			ptoshift.set(DoubleSolenoid.Value.kForward);
+		}
+	}
+	
+	public void setPTOHigh()
+	{
+		ptoshift.set(DoubleSolenoid.Value.kForward);
+	}
+	public void setPTOLow()
+	{
+		ptoshift.set(DoubleSolenoid.Value.kReverse);
 	}
 	public DoubleSolenoid.Value getHighGear()
 	{
 		return shifter.get();
+	}
+	public DoubleSolenoid.Value getPTOHigh()
+	{
+		return ptoshift.get();
 	}
 
 	@Override

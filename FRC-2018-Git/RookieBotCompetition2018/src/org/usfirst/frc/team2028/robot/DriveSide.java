@@ -5,9 +5,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class DriveSide {
 	
 	/** this is a motor*/
@@ -23,10 +20,10 @@ public class DriveSide {
 		Master.setNeutralMode(NeutralMode.Brake);
 		Master.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		Master.setSensorPhase(setPhase);
-		Master.config_kP(0, Parameters.MOTOR_P, 0);
-		Master.config_kI(0, Parameters.MOTOR_I, 0);
-		Master.config_kD(0, Parameters.MOTOR_D, 0);
-		Master.config_kF(0, Parameters.MOTOR_F, 0);
+		Master.config_kP(0, Parameters.Pid.DRIVE_MOTOR.getP(), 0);
+		Master.config_kI(0, Parameters.Pid.DRIVE_MOTOR.getI(), 0);
+		Master.config_kD(0, Parameters.Pid.DRIVE_MOTOR.getD(), 0);
+		Master.config_kF(0, Parameters.Pid.DRIVE_MOTOR.getF(), 0);
 		Master.set(ControlMode.Velocity, 0);
 		Master.setInverted(isInverted);
 

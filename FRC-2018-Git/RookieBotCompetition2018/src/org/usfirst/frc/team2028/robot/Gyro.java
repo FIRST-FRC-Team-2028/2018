@@ -41,7 +41,6 @@ public class Gyro extends Subsystem implements PIDSource {
 	@Override
 	public double pidGet(){
 		
-//		double angle = getAngle(gyro.getAngle());
 		// TODO Auto-generated method stub
 		if (Parameters.GYRO_AVAILABLE) {
 			SmartDashboard.putNumber("GYROANGLE", gyro.getAngle());
@@ -59,16 +58,6 @@ public class Gyro extends Subsystem implements PIDSource {
 		{
 			return 0.0;
 		}			
-	}
-	
-	private double getAngle(double angle)
-	{
-		if (Parameters.GYRO_AVAILABLE) {
-			return angle;
-		} else
-		{
-			return 0.0;
-		}		
 	}
 	
 	public void reset()

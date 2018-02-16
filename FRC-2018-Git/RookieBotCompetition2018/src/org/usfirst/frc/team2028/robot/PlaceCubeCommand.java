@@ -9,7 +9,7 @@ public class PlaceCubeCommand extends Command
 	private double seconds;
 	public PlaceCubeCommand(Gripper gripper_, double gripperspeed_)
 	{
-		Gripper gripper = gripper_;
+		gripper = gripper_;
 		gripperspeed = gripperspeed_;
 		seconds = Parameters.GRIPPER_SPITTIME;
 	}
@@ -21,7 +21,7 @@ public class PlaceCubeCommand extends Command
 
 	protected void execute()
 	{
-		gripper.placeCube(gripperspeed);
+		gripper.ejectCube();
 	}
 	
 	@Override

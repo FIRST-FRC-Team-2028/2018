@@ -3,32 +3,31 @@ package org.usfirst.frc.team2028.robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * 	This Command waits for a specified time given in its constructor parameters.
- * 
- * @author robotics
+ *
  */
-public class WaitCommand extends Command {
-	
-	double settime;
-	
-	/**
-	 * 
-	 * @param time_
-	 */
-    public WaitCommand(double time_) {
+public class LiftRampCommand extends Command {
+	Ramp ramp;
+	Drive drive;
+    public LiftRampCommand(Ramp ramp, Drive drive) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	settime = time_;
+    	requires(ramp);
+    	requires(drive);
+    	this.ramp = ramp;
+    	this.drive = drive;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	this.setTimeout(settime);
+    	ramp.deployOutriggers();
+    	drive.setPTOLow();
+    	this.setTimeout(7);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
+    	drive.go();
+    	drive.set(50);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -38,13 +37,12 @@ public class WaitCommand extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	//Intentionally does nothing.
+    	drive.stop();
+    	drive.go();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    protected void interrupted() 
-    {
-    	
+    protected void interrupted() {
     }
 }
