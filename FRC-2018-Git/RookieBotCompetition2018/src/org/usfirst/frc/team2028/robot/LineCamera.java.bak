@@ -3,8 +3,6 @@ package org.usfirst.frc.team2028.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team2028.robot.Parameters.TapeColor;
-
 public class LineCamera {
 	DigitalInput red;
 	DigitalInput blue;
@@ -13,10 +11,10 @@ public class LineCamera {
 	
 	LineCamera()
 	{
-		red = new DigitalInput(TapeColor.RED.getDigitalInputChannel());
-		blue = new DigitalInput(TapeColor.BLUE.getDigitalInputChannel());
-		white = new DigitalInput(TapeColor.WHITE.getDigitalInputChannel());
-		black = new DigitalInput(TapeColor.BLACK.getDigitalInputChannel());
+		red = new DigitalInput(9);
+		blue = new DigitalInput(8);
+		white = new DigitalInput(7);
+		black = new DigitalInput(6);
 	}
 	
 	public boolean isRed()

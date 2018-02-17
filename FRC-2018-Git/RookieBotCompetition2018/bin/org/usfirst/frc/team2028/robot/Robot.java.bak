@@ -4,9 +4,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 //import com.ctre.CANTalon;
 //import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -223,13 +220,13 @@ public class Robot extends IterativeRobot {
 
 		autooption2 = new AutoOption2(pidController, drive, ultrasonic, delay, positionknob,
 				leftswitch, gamedata);
-		autooption3 = new AutoOption3(pidController, drive, lift, gripper, ultrasonic, delay, positionknob,
+		autooption3 = new AutoOption3(pidController, drive, ultrasonic, delay, positionknob,
 				leftswitch, gamedata);
-		autooption4 = new AutoOption4(pidController, drive, lift, gripper, ultrasonic, lineCamera, delay, positionknob,
+		autooption4 = new AutoOption4(pidController, drive, ultrasonic, delay, positionknob,
 				leftscale, gamedata);
-		autooption5 = new AutoOption5(pidController, drive, lift, gripper, ultrasonic, lineCamera, delay, positionknob,
+		autooption5 = new AutoOption5(pidController, drive, ultrasonic, delay, positionknob,
 				leftswitch, gamedata);
-		autooption6 = new AutoOption6(pidController, drive, lift, gripper, ultrasonic, lineCamera, delay, positionknob,
+		autooption6 = new AutoOption6(pidController, drive, ultrasonic, delay, positionknob,
 				leftscale, gamedata);
 		autooption11 = new AutoTest4(pidController,  drive,  lift, ultrasonic,
 				 positionknob,  leftswitch, gamedata);
@@ -472,21 +469,10 @@ public class Robot extends IterativeRobot {
 			gripper.launchCube();
 		}
 
-		boolean Trigger2 = false;
+
 		if(LaunchPad.getRawButton(10))
 		{
 			ramp.retractOutrigger();
-
-			if(Controller.getRawButton(10) && Trigger2 == false)
-			{	
-				drive.shiftPTO();
-				Trigger2 = true;
-				while(Trigger2 == true && Controller.getRawButton(10))
-				{
-	
-				}
-			}
-
 		}
 		if(LaunchPad.getRawButton(11))
 		{
@@ -621,16 +607,16 @@ public class Robot extends IterativeRobot {
 			}
 		}
 
-//		boolean Trigger2 = false;
-//		if(Controller.getRawButton(10) && Trigger2 == false)
-//		{	
-//			drive.shiftPTO();
-//			Trigger2 = true;
-//			while(Trigger2 == true && Controller.getRawButton(10))
-//			{
-//
-//			}
-//		}
+		boolean Trigger2 = false;
+		if(Controller.getRawButton(10) && Trigger2 == false)
+		{	
+			drive.shiftPTO();
+			Trigger2 = true;
+			while(Trigger2 == true && Controller.getRawButton(10))
+			{
+
+			}
+		}
 	}
 
 	/**
@@ -641,11 +627,6 @@ public class Robot extends IterativeRobot {
 		double Rotary_Switch_1_Value = LaunchPad.getX();
 		SmartDashboard.putNumber("Switch Raw Value", Rotary_Switch_1_Value);
 		SmartDashboard.putNumber("Tape Color", lineCamera.getColor());
-		if(Controller.getXButton())
-		{
-			drive.set(200);
-		}
-		drive.set(0);
 		Scheduler.getInstance().run();
 	}
 

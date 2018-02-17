@@ -12,7 +12,7 @@ public class AutoOption5 extends CommandGroup {
 	 *From the side drop the cube on nearest available target
 	 *at least cross auto line 
 	 */
-    public AutoOption5(PIDController pidcontroller, Drive drive,Lift lift , Gripper gripper, Ultrasonic ultrasonic, LineCamera Linecam, double wait_time, 
+    public AutoOption5(PIDController pidcontroller, Drive drive, Ultrasonic ultrasonic, double wait_time, 
 			int knobposition, boolean left, String gamedata)
     {	    	
     		boolean leftdriverswitch;
@@ -31,7 +31,7 @@ public class AutoOption5 extends CommandGroup {
     		else if (gamedata.charAt(1) == robotSide)  
     		{
 //			run autooption4 
-    			addSequential(new AutoOption4( pidcontroller,  drive, lift, gripper, ultrasonic, Linecam, wait_time,
+    			addSequential(new AutoOption4( pidcontroller,  drive,  ultrasonic,  wait_time, 
    					 knobposition, left, gamedata));
     		}
 //    		cross autoline

@@ -47,7 +47,7 @@ public class Drive extends Subsystem implements PIDOutput {
 				CanId.RIGHT_FOLLOWER.getCanId(), 
 				!Parameters.LEFT_DRIVE_INVERTED, Parameters.RIGHT_PHASE);
         shifter.set(DoubleSolenoid.Value.kForward);
-        this.setDefaultCommand(joystickDrive);
+//        this.setDefaultCommand(joystickDrive);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class Drive extends Subsystem implements PIDOutput {
 		
 		isvoltagemode = false;
 		rightspeed = 200;
-		leftspeed = 210;
+		leftspeed = 200;
 		if(right.getPosition() > pos)
 		{
 			rightspeed = 0;

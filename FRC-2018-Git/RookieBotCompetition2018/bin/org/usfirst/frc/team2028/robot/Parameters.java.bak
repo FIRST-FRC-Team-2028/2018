@@ -5,7 +5,7 @@ public class Parameters {
 	/**
 	 * Flags to control condition hardware availability between competition and rookie/practice bot
 	 */
-	public static final boolean COMPRESSOR_AVAILABLE = false;
+	public static final boolean COMPRESSOR_AVAILABLE = true;
 	public static final boolean RAMP_AVAILABLE = false;
 	public static final boolean GRIPPER_AVAILABLE = false;
 	public static final boolean LIFT_AVAILABLE = false;
@@ -21,7 +21,7 @@ public class Parameters {
 	
 	public enum Pid {
 		
-		DRIVE_MOTOR(0.1, 0.00, 0.00, 0.0),	// TODO: CHANGE PID VALUES FOR DRIVE FIXME: CHANGE PID VALUES FOR DRIVE
+		DRIVE_MOTOR(0.8, 0.003, 0.001, 0.0),	// TODO: CHANGE PID VALUES FOR DRIVE FIXME: CHANGE PID VALUES FOR DRIVE
 		CONTROLLER(9, 0.008, 0.005, 0.0),
 		CAMERA(190.0, 0.2, 0.0, 0.0),
 		LIFT(1.0, 0.00005, 0.0, 0.0);			// FIXME - replace with real values
@@ -122,35 +122,10 @@ public class Parameters {
 	
 	// Gripper characteristics
 	public static final double GRIPPER_SPITTIME = 1;//time cube needs to leave the gripper
-	public static final double DISTANCE_TO_SPIT = 4; // how far cube goes from gripper when ejected
+	public static final double DISTANCE_TO_SPIT = 4; // distance from cube destination
 	public static final double LIFT_FLOOR_POSITION = 0;
 	public static final double CUBEHANDLER_LENGTH = 12;
 
-	public static final int LINE_COLOR_BLACK = 0;
-	public static final int LINE_COLOR_RED = 1;
-	public static final int LINE_COLOR_BLUE = 2;
-	public static final int LINE_COLOR_WHITE = 3;
-	public static final double LINE_SEARCH_SPEED = 300;
-
-	public enum TapeColor 
-	{
-		BLACK(8),
-		WHITE(7),
-		BLUE(6),
-		RED(5);
-		private int channel;
-		
-		private TapeColor(int digitalInputChannel)
-		{
-			channel = digitalInputChannel;
-		}
-		
-		public int getDigitalInputChannel() 
-		{
-			return channel;
-		}
-	}
-	
 	public enum PNEUMATIC_CHANNEL
 	{
 		OUTRIGGER_DEPLOY(6),
