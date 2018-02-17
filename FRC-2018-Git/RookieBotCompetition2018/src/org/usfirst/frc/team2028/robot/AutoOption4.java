@@ -13,7 +13,7 @@ public class AutoOption4 extends CommandGroup {
 	 *  drive into the null territory without crossing the middle line
 	 *  and deposit the cube on the scale
 	 */
-    public AutoOption4(PIDController pidcontroller, Drive drive, Ultrasonic ultrasonic, double wait_time, 
+    public AutoOption4(PIDController pidcontroller, Drive drive,Lift lift, Gripper gripper, Ultrasonic ultrasonic, LineCamera linecam, double wait_time, 
 			int knobposition, boolean left, String gamedata)
     {
     	boolean leftdriverswitch;
@@ -23,7 +23,6 @@ public class AutoOption4 extends CommandGroup {
 		addSequential(new AutoOption1(pidcontroller, drive, wait_time, knobposition, leftdriverswitch));
 		
 //		goto scale and puts cube
-		addSequential(new AutolineToScale( pidcontroller, drive, ultrasonic, 
-				 knobposition, left, gamedata));
+		addSequential(new AutolineToScale( pidcontroller, drive, lift, gripper, ultrasonic, linecam,knobposition, left, gamedata));
     }
 }

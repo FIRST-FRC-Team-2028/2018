@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoOption2 extends CommandGroup 
 {
 	/**
+	 * 
 	 * Deposits cube on switch from a side position (if the side 
 	 * we are on matches our alliance color)
 	 */

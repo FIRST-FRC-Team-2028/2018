@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
- *
  */
 public class LineTest extends Command {
 

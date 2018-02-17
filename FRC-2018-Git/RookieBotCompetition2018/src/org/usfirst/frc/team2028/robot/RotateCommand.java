@@ -33,7 +33,7 @@ public class RotateCommand extends Command {
     protected void initialize() {
     	pidcontroller.setSetpoint(Robot.turnTo(angle));
 //    	time1 = timer.get();
-    	time1 = Timer.getFPGATimestamp();
+    	time1 = timer.getFPGATimestamp();
     	error1 = pidcontroller.getError();
     	
     }
@@ -49,7 +49,7 @@ public class RotateCommand extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	double currentangle = pidcontroller.getSetpoint() - pidcontroller.getError();
-    	time2 = Timer.getFPGATimestamp();
+    	time2 = timer.getFPGATimestamp();
     	error2 = pidcontroller.getError();
     	double errordot =Math.abs((error1 - error2)/(time1 - time2));
     	SmartDashboard.putNumber("errordot", errordot);

@@ -17,22 +17,22 @@ public class DriveToPositionAuto extends CommandGroup {
     	SmartDashboard.putBoolean("DriveCommandGROUP", true);
     	requires(drive);
 //    	addSequential(new DriveCommand(drive, pos));
-    	addSequential(new DriveCommand(drive, pos));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new RotateCommand(drive, pidcontroller, 90));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new DriveCommand(drive, pos));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new RotateCommand(drive, pidcontroller, 180));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new DriveCommand(drive, pos));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new RotateCommand(drive, pidcontroller, 270));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new DriveCommand(drive, pos));
-    	addSequential(new WaitCommand(5));
-    	addSequential(new RotateCommand(drive, pidcontroller, 0));
-//    	addSequential(new DriveUltrasonicCommand(drive, ultrasonic, distance));
+//    	addSequential(new DriveCommand(drive, pos));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new RotateCommand(drive, pidcontroller, 90));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new DriveCommand(drive, pos));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new RotateCommand(drive, pidcontroller, 180));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new DriveCommand(drive, pos));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new RotateCommand(drive, pidcontroller, 270));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new DriveCommand(drive, pos));
+//    	addSequential(new WaitCommand(5));
+//    	addSequential(new RotateCommand(drive, pidcontroller, 0));
+    	addSequential(new DriveUltrasonicCommand(drive, ultrasonic, distance));
         // To run multiple commands at the same time,
         // use addParallel()
         // e.g. addParallel(new Command1());

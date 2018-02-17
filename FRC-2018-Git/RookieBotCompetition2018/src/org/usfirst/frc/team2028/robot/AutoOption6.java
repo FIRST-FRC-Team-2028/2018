@@ -8,7 +8,7 @@ public class AutoOption6 extends CommandGroup
 	/**
 	 * from center deposit cube on scale
 	 */
-	public AutoOption6(PIDController pidcontroller, Drive drive, Ultrasonic ultrasonic, double wait_time, 
+	public AutoOption6(PIDController pidcontroller, Drive drive, Lift lift, Gripper gripper, Ultrasonic ultrasonic, LineCamera Linecam, double wait_time, 
 			int knobposition, boolean left, String gamedata)
 	{
 		boolean leftSwitch = (gamedata.charAt(0) == 'L')? true : false;
@@ -43,8 +43,8 @@ public class AutoOption6 extends CommandGroup
 		addSequential(new RotateCommand(drive, pidcontroller, -angle));
 		
 //		goto scale and puts cube
-		addSequential(new AutolineToScale( pidcontroller, drive, ultrasonic,
-				 knobposition, left, gamedata));
+		addSequential(new AutolineToScale( pidcontroller, drive, lift, gripper, ultrasonic, Linecam, knobposition, left, gamedata));
+
 	}
 	
 	

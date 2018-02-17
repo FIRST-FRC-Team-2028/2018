@@ -27,7 +27,7 @@ public class PixyCamera implements PIDSource{
 	
 	public boolean iscubeseen()
 	{
-		if(getVoltage() < 0.03)
+		if(getVoltage() < 0.02)
 		{
 			return false;
 		}
