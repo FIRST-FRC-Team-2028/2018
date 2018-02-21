@@ -51,7 +51,7 @@ public class AutoOption3 extends CommandGroup {
 			addSequential(new DriveUltrasonicCommand(drive, ultrasonic, ultraSwitchDis));
 			
 //			raise lift to switch position 
-			addParallel(new LiftCommand(lift, Parameters.SWITCH_POSITION));
+			addParallel(new LiftCommand(lift, Parameters.LIFT_SWITCH_POSITION));
 			
 //		turn perpendicular to the drive station
 			addSequential(new RotateCommand(drive, pidcontroller, -auto1angle));

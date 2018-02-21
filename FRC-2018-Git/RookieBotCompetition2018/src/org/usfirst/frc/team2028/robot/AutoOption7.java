@@ -21,7 +21,7 @@ public class AutoOption7 extends CommandGroup {
     	addSequential(new AutoOption3(pidcontroller, drive, lift, gripper, ultrasonic, wait_time, knobposition, left, gamedata));
     	
     	// backup a little and lower gripper
-    	addSequential(new ResetGripperPosition(drive, lift));
+    	addSequential(new AfterDepositCommand(drive, lift));
     	
     	// turn toward the power cube zone to make detection of cube easier
     	

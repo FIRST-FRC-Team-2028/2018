@@ -23,6 +23,6 @@ public class AutoOption4 extends CommandGroup {
 		addSequential(new AutoOption1(pidcontroller, drive, wait_time, knobposition, leftdriverswitch));
 		
 //		goto scale and puts cube
-		addSequential(new AutolineToScale( pidcontroller, drive, lift, gripper, ultrasonic, linecam,knobposition, left, gamedata));
+		addSequential(new AutolineToScale( pidcontroller, drive, lift, gripper, ultrasonic, linecam, knobposition, left, gamedata));
     }
 }

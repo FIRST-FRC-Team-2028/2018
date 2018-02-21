@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class Ultrasonic {
 	
 	AnalogInput ultrasonic;
-	Ultrasonic()
+	Ultrasonic(int port)
 	{
-		ultrasonic = new AnalogInput(0);
+		ultrasonic = new AnalogInput(port);
 	}
 	
 	public double getDistance()
 	{
-		return ((ultrasonic.getValue()-59.55)/7.727);
+		return ((ultrasonic.getValue()-59.55)/7.727)+6;
 	}
 	
 	public double speed()

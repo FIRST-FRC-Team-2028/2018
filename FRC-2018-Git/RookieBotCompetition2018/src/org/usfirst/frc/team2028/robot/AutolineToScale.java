@@ -49,7 +49,7 @@ public class AutolineToScale extends CommandGroup {
     	addSequential(new DriveCommand(drive, dy-cy));
 
 // 		Lift cube to scale ( while driving)
-    	addParallel(new LiftCommand(lift, Parameters.SCALE_POSITION));  //TODO Raise lift command
+    	addParallel(new LiftCommand(lift, Parameters.LIFT_SCALE_POSITION));  //TODO Raise lift command
 		
 //    	Turn to face the scale
 //      B is point to drop cube

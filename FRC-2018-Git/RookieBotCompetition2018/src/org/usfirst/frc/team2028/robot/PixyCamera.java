@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class PixyCamera implements PIDSource{
-	AnalogInput X = new AnalogInput(1);
+	AnalogInput X = new AnalogInput(Parameters.PIXY_CAMERA_CUBE_PORT);
 	@Override
 	public void setPIDSourceType(PIDSourceType pidSource) {
 		X.setPIDSourceType(pidSource);
@@ -18,7 +18,7 @@ public class PixyCamera implements PIDSource{
 
 	@Override
 	public double pidGet() {
-		return -((X.getAverageVoltage()-1.65))*1.2; //this is multiplied to manipulate the PIDController's output
+		return -((X.getAverageVoltage()-1.65))*20.0; //this is multiplied to manipulate the PIDController's output
 	}												// to make the PIDController output larger values.
 	public double getVoltage()
 	{

@@ -6,33 +6,41 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 public class LiftRampCommand extends Command {
-	Ramp ramp;
+	
 	Drive drive;
-    public LiftRampCommand(Ramp ramp, Drive drive) {
+	
+	private boolean started;
+	
+    public LiftRampCommand(Drive drive) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(ramp);
+    	
     	requires(drive);
-    	this.ramp = ramp;
     	this.drive = drive;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	ramp.deployOutriggers();
     	drive.setPTOLow();
-    	this.setTimeout(7);
+    	setTimeout(Parameters.RAMP_LIFT_TIME);
     }
+    
+    
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	drive.set(Parameters.RAMP_LIFT_SPEED);
     	drive.go();
-    	drive.set(50);
+    	started = true;
     }
 
+    public boolean isStarted()
+    {
+    	return started;
+    }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return this.isTimedOut();
+        return isTimedOut();
     }
 
     // Called once after isFinished returns true

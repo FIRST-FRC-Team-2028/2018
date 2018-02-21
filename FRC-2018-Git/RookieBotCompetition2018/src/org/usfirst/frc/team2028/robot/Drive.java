@@ -9,6 +9,7 @@ import org.usfirst.frc.team2028.robot.Parameters;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Drive extends Subsystem implements PIDOutput {
@@ -24,6 +25,8 @@ public class Drive extends Subsystem implements PIDOutput {
 	
 	private DoubleSolenoid ptoshift;
 	
+	private Ultrasonic rearultrasonic;
+	
 	double leftspeed;
 	double rightspeed;
 	boolean isvoltagemode;
@@ -32,24 +35,52 @@ public class Drive extends Subsystem implements PIDOutput {
 	double position;
 	double value_;
 	
+	private Command defaultCommand;
+	
+	private XboxController controller;
+	
+	private Robot robot;
+	
 	/** 
 	 * Default constructor.
 	 */
-	Drive(Command joystickDrive)
+	Drive(Robot rob, XboxController con, Ultrasonic rearultrasonic)
 	{
+		super();
 //		air = new AnalogInput(3);
-		shifter = new DoubleSolenoid(Parameters.LOW_GEAR, Parameters.HIGH_GEAR);
-		ptoshift = new DoubleSolenoid(2, 3); //FIX ME! PUT IN PARAMETERS!!!!!!
+		shifter = new DoubleSolenoid(Parameters.PNEUMATIC_CHANNEL.LOW_GEAR.getChannel(),
+				Parameters.PNEUMATIC_CHANNEL.HIGH_GEAR.getChannel());
+		ptoshift = new DoubleSolenoid(Parameters.PNEUMATIC_CHANNEL.PTO_ENGAGE.getChannel(),
+				Parameters.PNEUMATIC_CHANNEL.PTO_DISENGAGE.getChannel());
 		left = new DriveSide(CanId.LEFT_MASTER.getCanId(), 
 				CanId.LEFT_FOLLOWER.getCanId(), 
-				Parameters.LEFT_DRIVE_INVERTED, Parameters.LEFT_PHASE);
+				Parameters.LEFT_DRIVE_INVERTED, Parameters.LEFT_PHASE, true);
 		right = new DriveSide(CanId.RIGHT_MASTER.getCanId(),
 				CanId.RIGHT_FOLLOWER.getCanId(), 
-				!Parameters.LEFT_DRIVE_INVERTED, Parameters.RIGHT_PHASE);
+				!Parameters.LEFT_DRIVE_INVERTED, Parameters.RIGHT_PHASE, false);
         shifter.set(DoubleSolenoid.Value.kForward);
-//        this.setDefaultCommand(joystickDrive);
+        controller = con;
+        robot = rob;
+        this.rearultrasonic = rearultrasonic;
+        getDefaultCommand();
 	}
-
+	
+	
+	
+	public Command getDefCommand() {
+		return defaultCommand;
+	}
+	
+	/**
+	 * Retrieve the motor output current for the left drive side 
+	 * and right drive side and returns the greatest value
+	 * @return double - greatest current value of right and left side.
+	 */
+	public double getMaximumMotorCurrent()
+	{
+		return Math.max(right.getMaximumMotorCurrent(), left.getMaximumMotorCurrent());
+	}
+	
 	/**
 	 * Method invoked by a PIDController class as part of its main
 	 * calculation loop.  Only used when the robot is spinning in 
@@ -67,13 +98,22 @@ public class Drive extends Subsystem implements PIDOutput {
 		value_ = value;
 	}
 
+	public double getRightVelocity()
+	{
+		return right.getVelocity();
+	}
+	public double getLeftVelocity()
+	{
+		return left.getVelocity();
+	}
+	
 	public void driveFollow(double speed)
 	{
 //		right.set(-speed);
 //		left.set(-(speed-value_));
 		
-		rightspeed = -speed;
-		leftspeed = -(speed-value_);
+		rightspeed = speed;
+		leftspeed = (speed-value_);
 		isvoltagemode = false;
 	}
 	
@@ -96,6 +136,7 @@ public class Drive extends Subsystem implements PIDOutput {
 		SmartDashboard.putNumber("AutoPositionRight", right.getPosition());
 		SmartDashboard.putNumber("AutoPositionLeft", left.getPosition());
 	}
+	
 	public void stop()
 	{
 		rightspeed = 0;
@@ -105,8 +146,8 @@ public class Drive extends Subsystem implements PIDOutput {
 	{
 //		right.set(-value_);
 //		left.set(value_);
-		rightspeed = -value_;
-		leftspeed = value_;
+		rightspeed = value_;
+		leftspeed = -value_;
 		isvoltagemode = false;
 	}
 	
@@ -146,6 +187,7 @@ public class Drive extends Subsystem implements PIDOutput {
 		} else {
 			return right.getVoltage(master);
 		}
+		
 	}
 
 	/** Overloaded method to drive the robot using two inputs (e.g.,
@@ -190,29 +232,97 @@ public class Drive extends Subsystem implements PIDOutput {
 	{
 		return (right.getPosition() + left.getPosition()/2);
 	}
+	double startposition;
+	double test = 0;
 	public boolean driveToPosition(double pos)
 	{
+		if (test == 0)
+		{
+			startposition = right.getPosition();
+			test +=1;
+		}
 //		right.resetPosition();
 //		left.resetPosition();
-		
+		double difference = (right.getPosition() - pos);
+		SmartDashboard.putNumber("Starting position", startposition);
+		SmartDashboard.putNumber("POS", pos);
 		isvoltagemode = false;
-		rightspeed = 200;
-		leftspeed = 200;
-		if(right.getPosition() > pos)
+		double direction = Math.signum(pos - startposition);
+		rightspeed = 300 * direction;
+		leftspeed = 300 * direction;
+		SmartDashboard.putNumber("direction", direction);
+		SmartDashboard.putNumber("Hello", 0);
+		SmartDashboard.putNumber("Right Position", right.getPosition());
+		SmartDashboard.putNumber("pos - right.getPosition", pos - right.getPosition());
+//		if(pos - right.getPosition() < direction*0.3)
+//		{
+//			SmartDashboard.putNumber("Hello", 1);
+//			rightspeed = 0;
+//			leftspeed = 0;
+//			test = 0;
+//			return true;
+//		}
+		if(direction < 0 && right.getPosition() < pos)
+		{
+			rightspeed = 0;
+			leftspeed = 0;
+			test = 0;
+			return true;
+		}
+		else if(direction > 0 && right.getPosition() > pos)
+		{
+			rightspeed = 0;
+			leftspeed = 0;
+			test = 0;
+			return true;
+		}
+		return false;
+	}
+	
+	public void resetDriveToPositions()
+	{
+		test = 0;
+	}
+	
+	public boolean driveForward(double pos)
+	{
+		if (test == 0)
+		{
+			startposition = right.getPosition();
+			test +=1;
+		}
+		double stop = startposition+pos;
+		rightspeed = 300;
+		leftspeed = 300;
+		isvoltagemode = false;
+		if(right.getPosition() > stop)
 		{
 			rightspeed = 0;
 			leftspeed = 0;
 			return true;
 		}
-//		}else if(right.getPosition() < 0 && right.getPosition() < pos)
-//		{
-//			rightspeed = 0;
-//			leftspeed = 0;
-//			return true;
-//		}
 		return false;
 	}
-	
+ 
+	public boolean driveReverse(double pos)
+	{
+		if(test == 0)
+		{
+			startposition = right.getPosition();
+			test +=1;
+		}
+		double stop = startposition - pos;
+		rightspeed = -300;
+		leftspeed = -300;
+		isvoltagemode = false;
+		if(right.getPosition() < stop)
+		{
+			rightspeed = 0;
+			leftspeed = 0;
+			return true;
+		}
+		return false;
+	}
 	public void shiftGear()
 	{
 		if(getHighGear() == DoubleSolenoid.Value.kForward)
@@ -242,10 +352,12 @@ public class Drive extends Subsystem implements PIDOutput {
 	{
 		ptoshift.set(DoubleSolenoid.Value.kForward);
 	}
+	
 	public void setPTOLow()
 	{
 		ptoshift.set(DoubleSolenoid.Value.kReverse);
 	}
+	
 	public DoubleSolenoid.Value getHighGear()
 	{
 		return shifter.get();
@@ -257,7 +369,8 @@ public class Drive extends Subsystem implements PIDOutput {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("\tInitizliaing default drive command");
+		defaultCommand = new JoystickDrive(controller, this, robot, rearultrasonic);
+		this.setDefaultCommand(defaultCommand);
 	}
 }

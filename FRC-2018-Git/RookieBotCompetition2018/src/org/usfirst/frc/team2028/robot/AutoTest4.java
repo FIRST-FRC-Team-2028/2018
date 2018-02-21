@@ -59,7 +59,7 @@ public class AutoTest4 extends CommandGroup {
 //    	addSequential(new PlaceCubeCommand())//TODO place cube command
     	
     	//reset Lift position
-    	addSequential(new ResetGripperPosition(drive, lift));
+    	addSequential(new AfterDepositCommand(drive, lift));
     	
 	}
 }

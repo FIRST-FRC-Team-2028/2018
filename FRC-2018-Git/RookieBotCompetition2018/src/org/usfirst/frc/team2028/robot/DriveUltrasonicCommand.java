@@ -13,6 +13,7 @@ public class DriveUltrasonicCommand extends Command {
     public DriveUltrasonicCommand(Drive drive, Ultrasonic ultrasonic, double distance) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+    	requires(drive);
     	this.ultrasonic = ultrasonic;
     	this.drive = drive;
     	this.distance = distance;

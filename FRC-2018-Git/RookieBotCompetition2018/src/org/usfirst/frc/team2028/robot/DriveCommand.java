@@ -28,9 +28,18 @@ public class DriveCommand extends Command {
     protected void initialize() {
 //    	drive.resetPosition();
     	startposition = drive.getrightposition();
+    	drive.resetDriveToPositions();
     	SmartDashboard.putNumber("initializedleftPosition", drive.getleftposition());
     	SmartDashboard.putNumber("initializedrightPosition", drive.getrightposition());
-    	drive.driveToPosition(startposition+pos);
+    	if(pos > 0)
+    	{
+    		drive.driveForward(Math.abs(pos));
+    	}
+    	else
+    	{
+    		drive.driveReverse(Math.abs(pos));
+    	}
+//    	drive.driveToPosition(startposition+pos);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -45,8 +54,11 @@ public class DriveCommand extends Command {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	
-    	
-        return drive.driveToPosition(startposition+pos);
+    	if(pos > 0)
+    	{
+    		return drive.driveForward(pos);
+    	}
+        return drive.driveReverse(pos);
     }
 
     // Called once after isFinished returns true

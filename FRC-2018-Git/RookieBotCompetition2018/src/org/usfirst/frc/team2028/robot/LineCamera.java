@@ -44,29 +44,25 @@ public class LineCamera {
 	 * returns 0 if it does not see anything.
 	 * @return
 	 */
-	public int getColor()
+	public TapeColor getColor()
 	{
 		if(isRed())
 		{
-			SmartDashboard.putString("Line Camera Vision", "red");
-			return 1;
+			return TapeColor.RED;
 		}
 		if(isWhite())
 		{
-			SmartDashboard.putString("Line Camera Vision", "white");
-			return 2;
+			return TapeColor.WHITE;
 		}
 		if(isBlue())
 		{
-			SmartDashboard.putString("Line Camera Vision", "blue");
-			return 3;
+			return TapeColor.BLUE;
 		}
 		if(isBlack())
 		{
 			SmartDashboard.putString("Line Camera Vision", "black");
-			return 4;
+			return TapeColor.BLACK;
 		}
-		SmartDashboard.putString("Line Camera Vision", "nothing");
-		return 0;
+		return TapeColor.NONE;
 	}
 }
