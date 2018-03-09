@@ -32,6 +32,8 @@ public class Lift extends Subsystem{
 			Lift_Motor.setNeutralMode(NeutralMode.Brake);
 			Lift_Motor.setInverted(Parameters.CanId.LIFTER_MASTER.isInverted());
 			Lift_Motor.setSensorPhase(true);
+			//Can we limit the motor speed or ramp the speed?
+			Lift_Motor.configClosedloopRamp(Parameters.LIFT_secondsFromNeutralToFull, 0);
 
 			//			Lift_Motor.configForwardSoftLimitThreshold((int)Parameters.LIFT_TOP_POSITION, 0);
 			//			Lift_Motor.configForwardSoftLimitEnable(true, 0);
@@ -75,6 +77,11 @@ public class Lift extends Subsystem{
 	//
 	//	}
 
+	public void setVoltage(double speed)
+	{
+		Lift_Motor.set(speed);
+	}
+	
 	public double getSetpoint()
 	{
 		if(Parameters.LIFT_AVAILABLE)

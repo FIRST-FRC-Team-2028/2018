@@ -66,7 +66,8 @@ public class AutoOption1 extends CommandGroup
 		}
 
 		angle = Math.atan((pointDistance - pos)/(D1/12)); 
-
+		
+		
 		addSequential(new WaitCommand(wait_time));
 
 		//	Drive to set distance (across the auto line)
@@ -80,8 +81,10 @@ public class AutoOption1 extends CommandGroup
 		//		Parameter: distance till robot is past the auto line
 		addSequential(new DriveCommand(drive, D1/Math.sin(angle)));
 
+//		addSequential(new StopRobot(drive));
 		//		Turn perpendicular to the drive station
 		//		Parameter: turning angle
+		addSequential(new TimedRotateCommand(200, -angle, drive));
 		addSequential(new RotateCommand(drive, pidcontroller, -angle));
 	}
 }

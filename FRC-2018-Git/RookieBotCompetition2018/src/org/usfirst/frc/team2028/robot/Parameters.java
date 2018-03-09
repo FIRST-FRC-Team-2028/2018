@@ -11,6 +11,8 @@ public class Parameters {
 	public static final boolean GRIPPER_AVAILABLE = true;
 	public static final boolean LIFT_AVAILABLE = true;
 	public static final boolean GYRO_AVAILABLE = true;
+	public static final boolean TEST_MODE = true;
+	public static final boolean VIDEO_GAME_DRIVE_MODE = false;
 	
 	public static final int ULTRASONIC_FRONT_ANALOG_PORT = 1;
 	public static final int ULTRASONIC_REAR_ANALOG_PORT = 0;
@@ -93,7 +95,8 @@ public class Parameters {
 	public static final double LIFT_TOP_POSITION = -20500.0;
 //	public static final double LIFT_RANGE = |SCALE_POSITION -
 	public static final double LIFT_POSITION_THRESHOLD = 0.02;
-//	public static final double GRIPPER_TILT_HORIZONTAL_POSITION = 
+//	public static final double GRIPPER_TILT_HORIZONTAL_POSITION =
+	public static final double LIFT_secondsFromNeutralToFull = 0.5; 
 	
 	public static final double RAMP_LIFT_TIME = 5;
 	public static final double RAMP_LIFT_SPEED = -400;
@@ -105,6 +108,15 @@ public class Parameters {
 	//These Field constants are the distance from the side of the field
 	// A -> W  are length stations
 	// 1 -> 11 are width stations
+	public static final int LIFT_ADJUST_POT = 3;
+	public static final int GRIPPER_TILT_POT = 4;
+	public static final int POSITION_KNOB = 0;
+	public static final int OBJECTIVE_KNOB = 1;
+	public static final int DELAY_KNOB = 2;
+	public static final int GREEN_SWITCH = 1;
+	public static final int BLUE_SWITCH = 2;
+	public static final int RED_SWITCH = 3;
+	
 	public static final double FIELD_P11 = 306; //inches
 	public static final double FIELD_P1 = 30;   // station P is the auto line
 	public static final double FIELD_WIDTH = 324; // 27 feet
@@ -123,6 +135,7 @@ public class Parameters {
 	// ultrasonic characteristics
 	public static final double ULTRASONICREAR_LOCATION = 7;
 	public static final double ULTRASONIC_FRONT_LOCATION = 7;
+	
 	
 	public static final double GRIPPER_TILT_SPEED = 0.3;
 	public static final double GRIPPER_INFEED_SPEED = 0.4;
@@ -145,7 +158,13 @@ public class Parameters {
 	public static final int LINE_COLOR_BLUE = 2;
 	public static final int LINE_COLOR_WHITE = 3;
 	public static final double LINE_SEARCH_SPEED = 300;
-
+	
+	public static final double AUTO_RIGHT_DRIVE_FORWARD_SPEED = 300;
+	public static final double AUTO_LEFT_DRIVE_FORWARD_SPEED = 300;
+	public static final double AUTO_RIGHT_DRIVE_REVERSE_SPEED = -300;
+	public static final double AUTO_LEFT_DRIVE_REVERSE_SPEED = -300;
+	
+	
 	public enum TapeColor 
 	{
 		NONE(-1),

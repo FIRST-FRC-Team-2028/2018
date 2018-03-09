@@ -65,6 +65,7 @@ public class AutolineToScale extends CommandGroup {
     	
 //      angle = atan( (bx-dx)/(by-dy))
     	double turnangle = Math.atan2((bx-dx),(by-dy));
+    	addSequential(new TimedRotateCommand(200, turnangle, drive));
     	addSequential(new RotateCommand(drive, pidcontroller, turnangle)); 
     	
     	

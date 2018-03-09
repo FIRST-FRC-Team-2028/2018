@@ -41,7 +41,7 @@ public class AutoOption3 extends CommandGroup {
 			double auto1angle; 
 			auto1angle= Math.atan((By-Cy)/(Bx-Cx));   //robot starts in center ie x = 84 
 //			TODO check this atan function especially the minus Cx portion ( if Bx = 30 this portion will end up negative) 
-
+			addSequential(new TimedRotateCommand(200, auto1angle, drive));
 			addSequential(new RotateCommand(drive, pidcontroller, auto1angle ));
 			
 //		drives till ultrasonic reads a set distance from the switch fence

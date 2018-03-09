@@ -214,6 +214,20 @@ public class Drive extends Subsystem implements PIDOutput {
 		leftspeed = speed;
 		isvoltagemode = false;
 	}
+
+	public void gameDrive(double leftSpeed, double turnSpeed)
+	{
+		if(leftSpeed != 0){
+		leftspeed = leftSpeed + (leftSpeed*turnSpeed);
+		rightspeed = leftSpeed - (leftSpeed*turnSpeed);
+		}
+		else
+		{
+			leftspeed = turnSpeed*0.9;
+			rightspeed = -turnSpeed*0.9;
+		}
+		isvoltagemode = true;
+	}
 	
 	public double getrightposition()
 	{
@@ -292,8 +306,8 @@ public class Drive extends Subsystem implements PIDOutput {
 			test +=1;
 		}
 		double stop = startposition+pos;
-		rightspeed = 300;
-		leftspeed = 300;
+		rightspeed = Parameters.AUTO_RIGHT_DRIVE_FORWARD_SPEED;
+		leftspeed = Parameters.AUTO_LEFT_DRIVE_FORWARD_SPEED;
 		isvoltagemode = false;
 		if(right.getPosition() > stop)
 		{
@@ -312,8 +326,8 @@ public class Drive extends Subsystem implements PIDOutput {
 			test +=1;
 		}
 		double stop = startposition - pos;
-		rightspeed = -300;
-		leftspeed = -300;
+		rightspeed = Parameters.AUTO_RIGHT_DRIVE_REVERSE_SPEED;
+		leftspeed = Parameters.AUTO_LEFT_DRIVE_REVERSE_SPEED;
 		isvoltagemode = false;
 		if(right.getPosition() < stop)
 		{

@@ -31,6 +31,7 @@ public class AutoOption6 extends CommandGroup
 //			ANGLE = arctan((D2+(D2-D3)/2)/D1-D4-D5)
 //			ANGLE = 23.3
 		double angle = (leftSwitch)? -23.3 : 23.3;
+		addSequential(new TimedRotateCommand(200, angle, drive));
 		addSequential(new RotateCommand(drive, pidcontroller, angle));
 		
 //		Drives across the auto line 
@@ -40,6 +41,7 @@ public class AutoOption6 extends CommandGroup
 		addSequential(new DriveCommand(drive, 77));
 		
 //		turn perpendicular to the driver station
+		addSequential(new TimedRotateCommand(200, -angle, drive));
 		addSequential(new RotateCommand(drive, pidcontroller, -angle));
 		
 //		goto scale and puts cube

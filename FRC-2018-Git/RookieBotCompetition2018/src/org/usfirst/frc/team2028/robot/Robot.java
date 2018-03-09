@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
 	PixyCamera pixycamera = new PixyCamera();
 	Joystick LaunchPad = new Joystick(Parameters.CONTROLBOARD_BUTTONS_PORT);
 	Joystick pots = new Joystick(Parameters.CONTROLBOARD_POTS_PORT);
-	Joystick Switches = new Joystick(Parameters.CONTROLBOARD_SWITCHES_PORT);
+	Joystick switches = new Joystick(Parameters.CONTROLBOARD_SWITCHES_PORT);
 	Ultrasonic frontultrasonic = new Ultrasonic(Parameters.ULTRASONIC_FRONT_ANALOG_PORT);
 	Ultrasonic rearultrasonic = new Ultrasonic(Parameters.ULTRASONIC_REAR_ANALOG_PORT);
 	Compressor comp;
@@ -53,6 +53,7 @@ public class Robot extends IterativeRobot {
 	AutoOption7 autooption7;
 	AutoTest4   autooption11;
 	Command joystickdrive = null;
+	Command testFunc;
 
 
 	AnalogInput sonar;
@@ -134,7 +135,8 @@ public class Robot extends IterativeRobot {
 
 	public int decodeRotary(int axisnumber)
 	{
-		double[] Rotary_Switch_1 = { -1.000,       //  1 
+		double[] Rotary_Switch_1 = { 
+				-1.000,       //  1 
 				-0.800,       //  2
 				-0.600,       //  3
 				-0.400,       //  4
@@ -174,6 +176,23 @@ public class Robot extends IterativeRobot {
 		positionknob = decodeRotary(0);
 		objectiveknob = decodeRotary(1);
 		delayknob = decodeRotary(2);
+
+		double[] speed = {50, 100, 150, 200, 250, 300, 350, 400, 450, 500};
+		TapeColor greenswitch;
+		double Rotary_Switch_1_Value = LaunchPad.getX();
+		SmartDashboard.putNumber("Switch Raw Value", Rotary_Switch_1_Value);
+		if (Parameters.LINE_CAMERA_AVAILABLE) {
+			TapeColor colorSeen = linecamera.getColor();
+			SmartDashboard.putString("Tape Color", colorSeen.toString());
+		}
+
+		if(switches.getRawButton(Parameters.GREEN_SWITCH))
+		{
+			greenswitch = Parameters.TapeColor.BLACK;
+		}else
+		{
+			greenswitch = Parameters.TapeColor.WHITE;
+		}
 
 		//		gyro.reset();//TODO: adjust for start orientation angle.
 		String gamedata = DriverStation.getInstance().getGameSpecificMessage();
@@ -237,6 +256,11 @@ public class Robot extends IterativeRobot {
 			delay = 0;
 			break;
 		}
+		SmartDashboard.putNumber("knob", objectiveknob);
+
+		testFunc = new TestGroup(objectiveknob, drive, positionknob, delayknob,
+				greenswitch, lift, gripper, gyro, linecamera,
+				pots.getRawAxis(Parameters.GRIPPER_TILT_POT));
 
 		autooption1 = new AutoOption1(pidController, drive, delay, positionknob, leftswitch);
 
@@ -253,33 +277,40 @@ public class Robot extends IterativeRobot {
 		autooption11 = new AutoTest4(pidController,  drive,  lift, rearultrasonic,
 				positionknob,  leftswitch, gamedata);
 
-		switch(objectiveknob)
+		if(Parameters.TEST_MODE)
 		{
-		case 1:
-			autooption1.start();
-			break;
-		case 2:
-			autooption2.start();
-			break;
-		case 3:
-			autooption3.start();
-			break;
-		case 4:
-			autooption4.start();
-			break;
-		case 5:
-			autooption5.start();
-			break;
-		case 6:
-			autooption6.start();
-			break;
-		case 7:
-			autooption7.start();
-			break;
-		case 11:
-			autooption11.start();
-		default:
-			break;
+			testFunc.start();
+		}
+		else
+		{
+			switch(objectiveknob)
+			{
+			case 1:
+				autooption1.start();
+				break;
+			case 2:
+				autooption2.start();
+				break;
+			case 3:
+				autooption3.start();
+				break;
+			case 4:
+				autooption4.start();
+				break;
+			case 5:
+				autooption5.start();
+				break;
+			case 6:
+				autooption6.start();
+				break;
+			case 7:
+				autooption7.start();
+				break;
+			case 11:
+				autooption11.start();
+			default:
+				break;
+			}
 		}
 		SmartDashboard.putBoolean("autostart", true);
 
@@ -412,6 +443,8 @@ public class Robot extends IterativeRobot {
 			comp.stop();
 		}
 
+
+
 		double airpressure = tank.getAverageVoltage();
 		if(Parameters.LIFT_AVAILABLE){
 			SmartDashboard.putBoolean("FwdLimitSwitch", lift.isLiftUp());
@@ -424,16 +457,20 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("right position", drive.getrightposition());
 		SmartDashboard.putNumber("left position", drive.getleftposition());
 
-		if(LaunchPad.getRawButton(9))
+		SmartDashboard.putNumber("max motor current", drive.getMaximumMotorCurrent());
+		if(LaunchPad.getRawButton(9) && switches.getRawButton(Parameters.RED_SWITCH))
 		{
-			decodeRotary(0);
-			decodeRotary(1);
-			decodeRotary(2);
-			SmartDashboard.putNumber("adjust pot", pots.getRawAxis(3));
-			SmartDashboard.putNumber("Gripper pot", pots.getRawAxis(4));
+//			decodeRotary(0);
+//			decodeRotary(1);
+//			decodeRotary(2);
+//			SmartDashboard.putNumber("adjust pot", pots.getRawAxis(3));
+//			SmartDashboard.putNumber("Gripper pot", pots.getRawAxis(4));
+			drive.set(275);
 		}
-
-
+		else
+		{
+			drive.set(0);
+		}
 
 		//		if(Controller.getRawButton(10))
 		//		{
@@ -461,6 +498,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Gyro value", gyro.pidGet());
 		Controller.setRumble(RumbleType.kLeftRumble, 0);
 		Controller.setRumble(RumbleType.kRightRumble, 0);
+
 
 		if(LaunchPad.getRawButton(5))
 		{
@@ -491,18 +529,25 @@ public class Robot extends IterativeRobot {
 
 
 		SmartDashboard.putString("PTOstate",drive.getPTOHigh().toString());
-		if(LaunchPad.getRawButton(10) && !endgame)
+		if(LaunchPad.getRawButton(10) && !endgame && switches.getRawButton(Parameters.RED_SWITCH))
 		{
 			SmartDashboard.putString("PTOstate",drive.getPTOHigh().toString());
 			System.out.println("lower outrigger button 10 pressed");
 			deployramp.start();
 			endgame = true;
 		}
-		if(LaunchPad.getRawButton(11) && deployramp.isFinished() && !liftramp.isStarted())
+		if(LaunchPad.getRawButton(11) && deployramp.isFinished() 
+				/*&& !liftramp.isStarted() */ && switches.getRawButton(Parameters.RED_SWITCH))
 		{
-			liftramp.start();
+			//			liftramp.start();
+			drive.set(-500); 
 		}
-
+		else
+		{
+			drive.stop();
+		}
+		
+		
 
 		if(endgame)
 		{
@@ -522,6 +567,8 @@ public class Robot extends IterativeRobot {
 			Controller.setRumble(RumbleType.kLeftRumble, 1);
 			Controller.setRumble(RumbleType.kRightRumble, 1);
 		}
+
+
 		if(Controller.getPOV() == 90)
 		{
 			SmartDashboard.putNumber("cameraX Value", pixycamera.getVoltage());			//X value of Camera
@@ -548,28 +595,33 @@ public class Robot extends IterativeRobot {
 
 		if(Controller.getYButton())
 		{
-			SmartDashboard.putNumber("Right Master out", drive.getVoltage(false, true));
-			SmartDashboard.putNumber("Left Master out", drive.getVoltage(true, true));
-			SmartDashboard.putNumber("setpoint", pidController.getSetpoint());
-			SmartDashboard.putNumber("getERROR", pidController.getError());
-			pidController.enable();
-			pidController.setInputRange(gyro.getAngle()-180, gyro.getAngle()+180);
-			pidController.setSetpoint(turnTo(90));
-			drive.pidRotate();
-			double time2 = Timer.getFPGATimestamp();
-			double error2 = pidController.getError();
-			double errordot = Math.abs((error1 - error2)/(time1 - time2));
-			time1 = time2;
-			error1 = error2;
-			SmartDashboard.putNumber("teleop time 1", time1);
-			SmartDashboard.putNumber("teleop error 1", error1);
-			SmartDashboard.putNumber("teleop time 2", time2);
-			SmartDashboard.putNumber("teleop error 2", error2);
-			SmartDashboard.putNumber("teleop errordot", errordot);
+			gripper.setVoltage(0.4);
+			//			SmartDashboard.putNumber("Right Master out", drive.getVoltage(false, true));
+			//			SmartDashboard.putNumber("Left Master out", drive.getVoltage(true, true));
+			//			SmartDashboard.putNumber("setpoint", pidController.getSetpoint());
+			//			SmartDashboard.putNumber("getERROR", pidController.getError());
+			//			pidController.enable();
+			//			pidController.setInputRange(gyro.getAngle()-180, gyro.getAngle()+180);
+			//			pidController.setSetpoint(turnTo(90));
+			//			drive.pidRotate();
+			//			double time2 = Timer.getFPGATimestamp();
+			//			double error2 = pidController.getError();
+			//			double errordot = Math.abs((error1 - error2)/(time1 - time2));
+			//			time1 = time2;
+			//			error1 = error2;
+			//			SmartDashboard.putNumber("teleop time 1", time1);
+			//			SmartDashboard.putNumber("teleop error 1", error1);
+			//			SmartDashboard.putNumber("teleop time 2", time2);
+			//			SmartDashboard.putNumber("teleop error 2", error2);
+			//			SmartDashboard.putNumber("teleop errordot", errordot);
 		}
-		else if(pidController.isEnabled())
+		else if(Controller.getAButton())
 		{
-			pidController.disable();
+			gripper.setVoltage(-0.4);
+		}
+		else
+		{
+			gripper.stopTilt();
 		}
 
 		if(LaunchPad.getRawButton(7))
@@ -596,21 +648,29 @@ public class Robot extends IterativeRobot {
 
 		if(LaunchPad.getRawButton(12))
 		{
-//			lift.setPosition(Parameters.LIFT_ZERO_POSITION);
+			//			lift.setPosition(Parameters.LIFT_ZERO_POSITION);
 			setpoint = Parameters.LIFT_ZERO_POSITION;
 			lift.setPosition(setpoint + (pots.getRawAxis(3))*(-2000));
 		}
 		else if(LaunchPad.getRawButton(6))
 		{
-//			lift.setPosition(Parameters.LIFT_SCALE_POSITION);
+			//			lift.setPosition(Parameters.LIFT_SCALE_POSITION);
 			setpoint = Parameters.LIFT_SCALE_POSITION;
 			lift.setPosition(setpoint + (pots.getRawAxis(3))*(-2000));
 		}
 		else if(LaunchPad.getRawButton(8))
 		{
-//			lift.setPosition(Parameters.LIFT_SWITCH_POSITION);
+			//			lift.setPosition(Parameters.LIFT_SWITCH_POSITION);
 			setpoint = Parameters.LIFT_SWITCH_POSITION;
 			lift.setPosition(setpoint + (pots.getRawAxis(3))*(-2000));
+		}
+		else if(Controller.getPOV() == 0)
+		{
+			lift.setVoltage(0.4);
+		}
+		else if (Controller.getPOV() == 180)
+		{
+			lift.setVoltage(-0.4);
 		}
 		else
 		{
@@ -622,14 +682,14 @@ public class Robot extends IterativeRobot {
 		{
 			gripper.resetTiltPosition();
 		}
-		if(pots.getRawAxis(4) > 0){
-			gripper.tiltTo(pots.getRawAxis(4)*(100));
+		if(pots.getRawAxis(4) > -0.97){
+			gripper.tiltTo(((pots.getRawAxis(4)+1))*(50));
 		}
 		else
 		{
 			gripper.stopTilt();
 		}
-//		lift.setPosition(setpoint + (pots.getRawAxis(3))*(-2000));
+		//		lift.setPosition(setpoint + (pots.getRawAxis(3))*(-2000));
 
 		if(Parameters.LIFT_AVAILABLE){	
 			SmartDashboard.putNumber("pto_current", drive.getMaximumMotorCurrent());
@@ -668,8 +728,8 @@ public class Robot extends IterativeRobot {
 		//		}
 	}
 
-	
-	
+
+
 	public boolean isTurning()
 	{
 		return pidController.isEnabled();
@@ -681,7 +741,11 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
-	public void testInit() {
+	public void testInit() { 
+
+		positionknob = decodeRotary(0); // use it for running the desired test
+		objectiveknob = decodeRotary(1); // use it for determining test parameters
+		delayknob = decodeRotary(2); //use it for determining more test parameters (if needed)
 		// Do nothing
 	}
 
@@ -690,13 +754,41 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		double[] speed = {50, 100, 150, 200, 250, 300, 350, 400, 450, 500};
+		TapeColor greenswitch;
 		double Rotary_Switch_1_Value = LaunchPad.getX();
 		SmartDashboard.putNumber("Switch Raw Value", Rotary_Switch_1_Value);
 		if (Parameters.LINE_CAMERA_AVAILABLE) {
 			TapeColor colorSeen = lineCamera.getColor();
 			SmartDashboard.putString("Tape Color", colorSeen.toString());
 		}
+		//		boolean greenswitch = switches.getRawButton(0);
+		if(switches.getRawButton(Parameters.GREEN_SWITCH))
+		{
+			greenswitch = Parameters.TapeColor.BLACK;
+		}else
+		{
+			greenswitch = Parameters.TapeColor.WHITE;
+		}
+		// Run the desired test
 
+		switch(decodeRotary(Parameters.POSITION_KNOB))		
+		{
+		case 1:
+			testFunc = new LineTest(drive, lineCamera, greenswitch, decodeRotary(Parameters.OBJECTIVE_KNOB));
+			break;
+		case 2:
+			testFunc = new TestRotate(0, 0, drive, decodeRotary(Parameters.OBJECTIVE_KNOB),
+					decodeRotary(Parameters.DELAY_KNOB), gyro);
+			break;
+		case 3:
+			testFunc = new TestExpel(gripper, decodeRotary(Parameters.OBJECTIVE_KNOB));
+			break;
+		case 4:
+			testFunc = new TestAngleMotor(gripper, decodeRotary(Parameters.OBJECTIVE_KNOB), decodeRotary(Parameters.DELAY_KNOB),
+					pots.getRawAxis(Parameters.GRIPPER_TILT_POT));
+		}		
+		testFunc.start();
 		Scheduler.getInstance().run();
 	}
 

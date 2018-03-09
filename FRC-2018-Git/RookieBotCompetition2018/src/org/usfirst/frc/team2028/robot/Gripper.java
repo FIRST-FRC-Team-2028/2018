@@ -1,6 +1,7 @@
 package org.usfirst.frc.team2028.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -28,6 +29,7 @@ public class Gripper {
 
 
 			Angle_Motor = new WPI_TalonSRX(Parameters.CanId.LIFT_TILT.getCanId());
+			Angle_Motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 			Angle_Motor.set(ControlMode.Position, 0);
 			Angle_Motor.config_kP(0, Parameters.Pid.GRIPPER.getP(), 0);
 			Angle_Motor.config_kI(0, Parameters.Pid.GRIPPER.getI(), 0);
@@ -42,6 +44,11 @@ public class Gripper {
 //			Angle_Motor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
 //					LimitSwitchNormal.NormallyOpen, 0);
 		}
+	}
+
+	public void setVoltage(double speed)
+	{
+		Angle_Motor.set(ControlMode.PercentOutput, speed);
 	}
 
 	public boolean isCubeHeld()
@@ -88,6 +95,14 @@ public class Gripper {
 	{
 		if(Parameters.GRIPPER_AVAILABLE){
 			Left_Motor.set(Parameters.GRIPPER_EJECT_SPEED);
+			on = true;
+		}
+	}
+
+	public void ejectCube(double speed)
+	{
+		if(Parameters.GRIPPER_AVAILABLE){
+			Left_Motor.set(speed);
 			on = true;
 		}
 	}

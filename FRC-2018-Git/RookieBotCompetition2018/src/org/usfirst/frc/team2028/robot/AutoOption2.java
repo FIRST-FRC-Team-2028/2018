@@ -41,6 +41,7 @@ public class AutoOption2 extends CommandGroup
 //		if start position is right turn left
 //		= +/- 90 degrees
 		double turn90 = (left)? 90 : -90;
+			addSequential(new TimedRotateCommand(200, turn90, drive));
 			addSequential(new RotateCommand(drive, pidcontroller, turn90));
 		
 //		dive till bumper touches fence
