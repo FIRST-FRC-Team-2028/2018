@@ -24,11 +24,11 @@ public class Lift extends Subsystem{
 
 			Lift_Motor = new WPI_TalonSRX(Parameters.CanId.LIFTER_MASTER.getCanId());
 			Lift_Motor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
-			Lift_Motor.config_kP(0, Parameters.Pid.LIFT.getP(), 0);
-			Lift_Motor.config_kI(0, Parameters.Pid.LIFT.getI(), 0);
-			Lift_Motor.config_kD(0, Parameters.Pid.LIFT.getD(), 0);
-			Lift_Motor.config_kF(0, Parameters.Pid.LIFT.getF(), 0);
-			Lift_Motor.set(ControlMode.Position, 0);
+//			Lift_Motor.config_kP(0, Parameters.Pid.LIFT.getP(), 0);
+//			Lift_Motor.config_kI(0, Parameters.Pid.LIFT.getI(), 0);
+//			Lift_Motor.config_kD(0, Parameters.Pid.LIFT.getD(), 0);
+//			Lift_Motor.config_kF(0, Parameters.Pid.LIFT.getF(), 0);
+//			Lift_Motor.set(ControlMode.Position, 0);
 			Lift_Motor.setNeutralMode(NeutralMode.Brake);
 			Lift_Motor.setInverted(Parameters.CanId.LIFTER_MASTER.isInverted());
 			Lift_Motor.setSensorPhase(true);

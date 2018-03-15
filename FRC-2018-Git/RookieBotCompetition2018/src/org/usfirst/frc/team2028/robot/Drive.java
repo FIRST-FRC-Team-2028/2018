@@ -71,6 +71,62 @@ public class Drive extends Subsystem implements PIDOutput {
 		return defaultCommand;
 	}
 	
+	public double getRightMotorOutputPercent()
+	{
+		return right.getMotorOutputPercent();
+	}
+	
+	public double getLeftMotorOutputPercent()
+	{
+		return left.getMotorOutputPercent();
+	}
+	
+	boolean plsstop = false;
+	boolean reset = false;
+	public boolean rotateToPosition(double angle, double speed)
+	{
+		SmartDashboard.putNumber("right position", getrightposition());
+		SmartDashboard.putNumber("left position", getleftposition());
+		double radians = angle * (Math.PI/180);
+		double distance = (radians*Parameters.ROBOT_RADIUS)*1.153;
+		if(reset == false)
+		{
+			resetPosition();
+			reset = true;
+		}
+		if(angle > 0 && plsstop == false)
+		{
+			rightspeed = -speed;
+			leftspeed = speed;
+			isvoltagemode = true;
+			return false;
+		}
+		else if (angle < 0 && plsstop == false)
+		{
+			leftspeed = -speed;
+			rightspeed = speed;
+			isvoltagemode = true;
+			return false;
+		}
+		if(Math.abs(getrightposition()) > distance || 
+				Math.abs(getleftposition()) > distance)
+		{
+			stop();
+			plsstop = true;
+			return true;
+		}
+		else
+		{
+			plsstop = false;
+			return false;
+		}
+	}
+	
+	public void resetRotatePosition()
+	{
+		reset = false;
+	}
+	
 	/**
 	 * Retrieve the motor output current for the left drive side 
 	 * and right drive side and returns the greatest value
@@ -350,6 +406,17 @@ public class Drive extends Subsystem implements PIDOutput {
 			shifter.set(DoubleSolenoid.Value.kForward);
 		}
 	}
+	
+	public void setLowGear()
+	{
+		shifter.set(DoubleSolenoid.Value.kReverse);
+	}
+	
+	public void setHighGear()
+	{
+		shifter.set(DoubleSolenoid.Value.kForward);
+	}
+	
 	public void shiftPTO()
 	{
 		if(getPTOHigh() == DoubleSolenoid.Value.kForward)
@@ -383,8 +450,8 @@ public class Drive extends Subsystem implements PIDOutput {
 
 	@Override
 	protected void initDefaultCommand() {
-		System.out.println("\tInitizliaing default drive command");
-		defaultCommand = new JoystickDrive(controller, this, robot, rearultrasonic);
-		this.setDefaultCommand(defaultCommand);
+//		System.out.println("\tInitizliaing default drive command");
+//		defaultCommand = new JoystickDrive(controller, this, robot, rearultrasonic);
+//		this.setDefaultCommand(defaultCommand);
 	}
 }

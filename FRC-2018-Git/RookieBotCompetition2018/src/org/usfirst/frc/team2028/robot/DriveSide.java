@@ -55,6 +55,11 @@ public class DriveSide {
 	{
 		return Math.max(Master.getOutputCurrent(), Follower.getOutputCurrent());
 	}
+	
+	public double getMotorOutputPercent()
+	{
+		return Master.getMotorOutputPercent();
+	}
 
 	//double position = Master.getSelectedSensorPosition(0);
 	public double getPosition()

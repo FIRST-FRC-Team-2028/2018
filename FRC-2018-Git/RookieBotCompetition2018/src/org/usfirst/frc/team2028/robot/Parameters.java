@@ -11,11 +11,12 @@ public class Parameters {
 	public static final boolean GRIPPER_AVAILABLE = true;
 	public static final boolean LIFT_AVAILABLE = true;
 	public static final boolean GYRO_AVAILABLE = true;
-	public static final boolean TEST_MODE = true;
+	public static final boolean TEST_MODE = false;
+	public static final boolean TEST_MODE_GRIPPER = true;
 	public static final boolean VIDEO_GAME_DRIVE_MODE = false;
 	
-	public static final int ULTRASONIC_FRONT_ANALOG_PORT = 1;
-	public static final int ULTRASONIC_REAR_ANALOG_PORT = 0;
+	public static final int ULTRASONIC_FRONT_ANALOG_PORT = 0;
+	public static final int ULTRASONIC_REAR_ANALOG_PORT = 1;
 	public static final int PIXY_CAMERA_CUBE_PORT = 2;
 	
 	public static final int CONTROLBOARD_BUTTONS_PORT = 1;
@@ -23,8 +24,9 @@ public class Parameters {
 	public static final int CONTROLBOARD_SWITCHES_PORT = 3;
 	// basic robot geometry
 	public static final double ROBOT_LENGTH = 32.75;
+	public static final double ROBOT_RADIUS = 25.5/2;
 	
-	public static final boolean RIGHT_PHASE = false;
+	public static final boolean RIGHT_PHASE = true;
 	public static final boolean LEFT_PHASE = false;
 	public static final boolean LEFT_DRIVE_INVERTED = false;
 	public static final boolean LEFT_GRIPPER_INVERTED = true;
@@ -36,7 +38,7 @@ public class Parameters {
 //		CONTROLLER(9, 0.008, 0.005, 0.0)
 		CONTROLLER(3.23, 0.012, 0.23, 0),//D was 0.5
 		CAMERA(18.0, 0.1, 0.007, 0.0),
-		LIFT(10, 0.00005, 0.0, 0.0),
+		LIFT(7, 0.00005, 0.0, 0.0),
 		GRIPPER(0.5 , 0 , 0 , 0);			// FIXME - replace with real values
 		
 		private double p;
@@ -88,7 +90,7 @@ public class Parameters {
 //	public static final double CAMERA_F = 0;
 	public static final double LIFT_ZERO_POSITION = -100;
 	public static final double LIFT_SWITCH_POSITION = -15000;
-	public static final double LIFT_SCALE_POSITION = -20000;
+	public static final double LIFT_SCALE_POSITION = -24000;
 	public static final double LIFT_CLIMB_POSITION = -13000;
 	public static final double LIFT_BAR_POSITION = -8000;
 	public static final double LIFT_BOTTOM_POSITION = 0.0;
@@ -139,7 +141,7 @@ public class Parameters {
 	
 	public static final double GRIPPER_TILT_SPEED = 0.3;
 	public static final double GRIPPER_INFEED_SPEED = 0.4;
-	public static final double GRIPPER_LAUNCH_SPEED = -0.5;
+	public static final double GRIPPER_LAUNCH_SPEED = -1.0;
 	public static final double GRIPPER_EJECT_SPEED = -0.3;
 	public static final double GRIPPER_DRIBBLE_SPEED = -0.1;
 	public static final double GRIPPER_TILT_VERTICAL_POSITION = 10;
@@ -191,7 +193,9 @@ public class Parameters {
 		LOW_GEAR(0),
 		HIGH_GEAR(1),
 		PTO_ENGAGE(2),
-		PTO_DISENGAGE(3);
+		PTO_DISENGAGE(3),
+		RAMP_NORMAL(4),
+		RAMP_DEPLOY(5);
 		
 		
 		private int channel;
@@ -211,8 +215,8 @@ public class Parameters {
 		RIGHT_MASTER(20, false),
 		RIGHT_FOLLOWER(21, false),
 		LIFTER_MASTER(40, true),
-		LEFT_GRIPPER(30, true),
-		RIGHT_GRIPPER(31, false),
+		LEFT_GRIPPER(31, false),
+		RIGHT_GRIPPER(30, true),
 		LIFT_TILT(50,false);
 		
 		private int canId;

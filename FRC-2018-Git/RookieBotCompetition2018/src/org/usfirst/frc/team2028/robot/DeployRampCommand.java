@@ -21,6 +21,7 @@ public class DeployRampCommand extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		drive.setLowGear();
 		if(Parameters.RAMP_AVAILABLE){
 			drive.setPTOLow();
 		}

@@ -1,74 +1,37 @@
 package org.usfirst.frc.team2028.robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.usfirst.frc.team2028.robot.Parameters.PNEUMATIC_CHANNEL;
 
 /**
- * This is the subsystem constructor and generally necessary code for the ramp subsystem.
+ *
  */
 public class Ramp extends Subsystem {
 
-	private boolean state_of_outriggers = false;
-
-	private DoubleSolenoid solenoid = null; 
-
-	public Ramp()
+	private Solenoid solenoid;
+	
+	Ramp()
 	{
-		if (Parameters.RAMP_AVAILABLE) {
-			solenoid = new DoubleSolenoid(
-					PNEUMATIC_CHANNEL.OUTRIGGER_DEPLOY.getChannel() ,
-					PNEUMATIC_CHANNEL.OUTRIGGER_OFF.getChannel() ); 
-		}
+		solenoid = new Solenoid(Parameters.PNEUMATIC_CHANNEL.RAMP_DEPLOY.getChannel());
 	}
-	/**
-	 * This method turns on the outriggers.
-	 */
-
-	public void deployOutriggers()
+	
+    // Put methods for controlling this subsystem
+    // here. Call these from Commands.
+	public void deployRamps()
 	{
-		if(Parameters.RAMP_AVAILABLE){
-			solenoid.set(DoubleSolenoid.Value.kForward);
-			state_of_outriggers = true;
-		}
+		solenoid.set(true);
 	}
-
-	/**
-	 * This method turns off the outrigggers.
-	 */
-	public void turnOffOutrigger()
+	public void openGeorge()
 	{
-		if(Parameters.RAMP_AVAILABLE){
-			solenoid.set(DoubleSolenoid.Value.kOff);
-		}
+		solenoid.set(false);
 	}
+	
 
-	public void retractOutrigger()
-	{
-		if(Parameters.RAMP_AVAILABLE){
-			solenoid.set(DoubleSolenoid.Value.kReverse);
-		}
-	}
-
-
-	/**
-	 * Gets whether or not the outriggers are employed.
-	 * @return
-	 */
-	public boolean getStateOfOutriggers()
-	{
-		if(Parameters.RAMP_AVAILABLE){
-			return state_of_outriggers;
-		}
-		return true;
-	}
-
-	@Override
-	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-
-	}
-
-
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+        //setDefaultCommand(new MySpecialCommand());
+    }
 }
 
